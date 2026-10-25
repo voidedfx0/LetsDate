@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#160914">
+<title>For You, My Love ❤️</title>
+<style>
+:root{--pink:#ff8fc8;--hot:#ff347c;--red:#d9144e;--ink:#160914}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow:hidden;display:grid;place-items:center;padding:22px;color:#fff5fb;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 15% 15%,#61203f 0,transparent 38%),radial-gradient(ellipse at 85% 80%,#481126 0,transparent 40%),linear-gradient(135deg,#10070f,#240b1b 55%,#120710)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:radial-gradient(#ffc0dd 1px,transparent 1px);background-size:34px 34px}
+.glow{position:fixed;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.24;pointer-events:none}.one{background:#ff2f75;top:-120px;left:-80px}.two{background:#c12bff;bottom:-130px;right:-80px}
+.card{position:relative;z-index:2;width:min(100%,550px);max-height:90vh;overflow:auto;padding:clamp(28px,6vw,52px) clamp(22px,6vw,48px);border:1px solid #ff9acb55;border-radius:30px;text-align:center;background:linear-gradient(145deg,#321426e8,#1a0b17f2);box-shadow:0 0 55px #ff2f7520,inset 0 1px #ffffff16;backdrop-filter:blur(14px);animation:arrive .8s ease both}
+.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;color:#ffacd0;margin:0 0 20px}.heart-mark{font-size:2.7rem;margin-bottom:12px;display:inline-block;filter:drop-shadow(0 0 18px #ff438c);animation:beat 1.5s infinite}
+h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(2rem,7vw,3.2rem);line-height:1.12;margin:0 0 18px}h1 span{color:var(--pink);font-style:italic}
+.question{font-size:clamp(1.05rem,3.6vw,1.35rem);color:#ffe6f1;line-height:1.55;margin:0 auto 28px;max-width:390px}
+.buttons{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:58px}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;cursor:pointer;padding:15px 26px;transition:transform .18s,box-shadow .18s;background:#ffffff0c;touch-action:manipulation}
+button:focus-visible{outline:3px solid white;outline-offset:4px}.yes{color:#2b0718;background:linear-gradient(135deg,#ffb4d8,#ff5ca5);box-shadow:0 8px 28px #ff2f7550}.yes:hover{transform:translateY(-3px) scale(1.03)}.no{color:#ffe5f0;border:1px solid #ff8fbd70}.next{background:linear-gradient(135deg,#ff477f,#d91d58);color:white;box-shadow:0 8px 26px #e7194f40}
+.hint{margin:24px 0 0;font-size:.84rem;color:#d6a9bf}.message{color:#ffe4ef;font-size:1.02rem;line-height:1.8;white-space:pre-line;margin:20px 0 26px}.hidden{display:none!important}.progress{margin-top:24px;color:#c99bb1;font-size:.75rem;letter-spacing:.12em}
+.floating-heart{position:fixed;bottom:-40px;z-index:1;pointer-events:none;opacity:0;animation:floatUp linear forwards;text-shadow:0 0 16px #ff2f75}.burst-heart{position:fixed;z-index:4;pointer-events:none;animation:burst 1.5s ease-out forwards}
+@keyframes arrive{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.13)}}@keyframes floatUp{0%{transform:translateY(0);opacity:0}12%{opacity:.8}100%{transform:translateY(-115vh) rotate(25deg);opacity:0}}@keyframes burst{0%{transform:translate(0,0) scale(.5);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.4) rotate(var(--rot));opacity:0}}
+@media(max-width:420px){.card{border-radius:24px;padding:28px 20px}.buttons{gap:12px}button{padding:14px 22px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="glow one"></div><div class="glow two"></div>
+<main class="card" aria-live="polite">
+<section id="question-screen">
+<div class="heart-mark">♥</div><p class="eyebrow">A little question from my heart</p>
+<h1>Hey, <span>beautiful</span>…</h1>
+<p class="question" id="question-text">Will you go on a date with me? ❤️</p>
+<div class="buttons"><button class="yes" id="yes-button">Yes, of course! 💖</button><button class="no" id="no-button" aria-label="No">No 🙈</button></div>
+<p class="hint" id="hint">Choose carefully, my love 🌹</p><div class="progress" id="progress">QUESTION 01</div>
+</section>
+<section id="message-screen" class="hidden">
+<div class="heart-mark">💗</div><p class="eyebrow">You just made my day</p><h1>Yaaay, <span>my love!</span></h1>
+<p class="message" id="romantic-message"></p><button class="next" id="next-button">Next: Question 2 💌</button><div class="progress">MADE WITH LOVE ♥</div>
+</section>
+<section id="later-screen" class="hidden">
+<div class="heart-mark">💌</div><p class="eyebrow">Our little love story</p><h1>More questions, <span>more memories</span></h1>
+<p class="question">Question 2 is ready for your own words. To customize the questions and messages, edit the values in the script near the bottom of index.html. ❤️</p>
+<button class="next" id="back-button">Back to Question 1 ↺</button><div class="progress">TO BE CONTINUED…</div>
+</section>
+</main>
+<script>
+/* EASY CUSTOMIZATION: change these texts whenever you want. */
+const firstQuestion = "Will you go on a date with me? ❤️";
+const loveMessage = "My love, ❤️🥹\n\nYou have no idea how happy you make me. Just the thought of spending a beautiful moment with you makes me smile. 💕🌹\n\nIf I could choose one place to be, it would be right beside you. I want to see your smile, hear your laughter, look into your eyes, and create beautiful memories together.\n\nYou and me, a date to remember. 🌹❤️";
+document.getElementById("question-text").textContent = firstQuestion;
+document.getElementById("romantic-message").textContent = loveMessage;
+const questionScreen=document.getElementById("question-screen"),messageScreen=document.getElementById("message-screen"),laterScreen=document.getElementById("later-screen"),noButton=document.getElementById("no-button");
+let dodges=0;
+function dodgeNo(event){if(event)event.preventDefault();dodges++;const pad=18,rect=noButton.getBoundingClientRect(),maxX=Math.max(pad,innerWidth-rect.width-pad),maxY=Math.max(pad,innerHeight-rect.height-pad);let x=pad+Math.random()*(maxX-pad),y=pad+Math.random()*(maxY-pad);const card=document.querySelector(".card").getBoundingClientRect();for(let i=0;i<18&&x<card.right&&x+rect.width>card.left&&y<card.bottom&&y+rect.height>card.top;i++){x=pad+Math.random()*(maxX-pad);y=pad+Math.random()*(maxY-pad)}noButton.style.position="fixed";noButton.style.left=x+"px";noButton.style.top=y+"px";noButton.style.zIndex="10";document.getElementById("hint").textContent=dodges<4?"Hehe… try catching me! 🙈💕":"Someone really wants to say YES 😘"}
+noButton.addEventListener("pointerenter",dodgeNo);noButton.addEventListener("pointerdown",dodgeNo);noButton.addEventListener("click",dodgeNo);
+function heartBurst(){const symbols=["♥","❤","💗","💕","💖","🌹"];for(let i=0;i<34;i++){const el=document.createElement("span");el.className="burst-heart";el.textContent=symbols[Math.floor(Math.random()*symbols.length)];el.style.left=innerWidth/2+"px";el.style.top=innerHeight/2+"px";el.style.fontSize=14+Math.random()*22+"px";el.style.setProperty("--dx",(Math.random()-.5)*innerWidth*.9+"px");el.style.setProperty("--dy",-30-Math.random()*innerHeight*.75+"px");el.style.setProperty("--rot",(Math.random()-.5)*100+"deg");document.body.appendChild(el);setTimeout(()=>el.remove(),1600)}}
+document.getElementById("yes-button").addEventListener("click",()=>{questionScreen.classList.add("hidden");messageScreen.classList.remove("hidden");noButton.style.display="none";heartBurst()});
+document.getElementById("next-button").addEventListener("click",()=>{messageScreen.classList.add("hidden");laterScreen.classList.remove("hidden")});
+document.getElementById("back-button").addEventListener("click",()=>{laterScreen.classList.add("hidden");questionScreen.classList.remove("hidden");noButton.style.display="";noButton.style.position="";noButton.style.left="";noButton.style.top="";document.getElementById("hint").textContent="Choose carefully, my love 🌹";dodges=0});
+const hearts=["♥","♡","💕","💗"];function addFloatingHeart(){const el=document.createElement("span");el.className="floating-heart";el.textContent=hearts[Math.floor(Math.random()*hearts.length)];el.style.left=Math.random()*100+"vw";el.style.fontSize=12+Math.random()*22+"px";el.style.animationDuration=7+Math.random()*8+"s";document.body.appendChild(el);setTimeout(()=>el.remove(),16000)}setInterval(addFloatingHeart,650);
+</script>
+</body>
+</html>
