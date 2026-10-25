@@ -26,7 +26,7 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 .back-small{display:inline-flex;align-items:center;gap:5px;margin:0 auto 18px;padding:7px 12px;font-size:.78rem;font-weight:600;color:#ffe5f0;background:#ffffff08;border:1px solid #ff9dc955;box-shadow:none}
 .hint{font-size:.82rem;color:var(--muted);margin:13px 0 0}.progress{margin-top:22px;font-size:.68rem;letter-spacing:.17em;color:#b88ba2}
 .message{white-space:pre-line;line-height:1.85;color:#ffe5f0;margin:20px 0 25px;font-size:1rem}.hidden{display:none!important}
-.tiny-star{position:fixed;z-index:1;pointer-events:none;color:#ffd9ec;font-size:10px;opacity:0;text-shadow:0 0 9px #ff8fbd;animation:twinkle 2.8s ease-in-out infinite}
+
 @keyframes twinkle{0%,100%{opacity:.08;transform:scale(.7)}45%{opacity:.85;transform:scale(1.15)}}
 .floating-heart{position:fixed;bottom:-30px;z-index:1;pointer-events:none;opacity:0;animation:rise linear forwards;color:#ff8dbb;text-shadow:0 0 12px #ff367d}
 @keyframes rise{15%{opacity:.55}100%{transform:translateY(-110svh);opacity:0}}
@@ -69,8 +69,7 @@ document.getElementById("next-button").addEventListener("click",()=>{messageScre
 document.getElementById("message-back-button").addEventListener("click",resetQuestion);
 document.getElementById("later-back-button").addEventListener("click",()=>{laterScreen.classList.add("hidden");messageScreen.classList.remove("hidden")});
 document.getElementById("back-button").addEventListener("click",resetQuestion);
-function placeStars(){document.querySelectorAll(".tiny-star").forEach(s=>s.remove());const b=document.querySelector(".card").getBoundingClientRect(),points=[[-22,.22],[b.width*.25,-22],[b.width*.72,-18],[b.width+18,.34],[b.width+24,.72],[b.width*.28,b.height+18],[b.width*.72,b.height+22],[-20,.78]];points.forEach((p,i)=>{let x,y;if(i===0||i===3||i===4||i===7){x=i===0||i===7?b.left+p[0]:b.left+p[0];y=b.top+b.height*p[1]}else{x=b.left+p[0];y=b.top+p[1]}if(x<8||x>innerWidth-8||y<8||y>innerHeight-8)return;if(x>=b.left-8&&x<=b.right+8&&y>=b.top-8&&y<=b.bottom+8)return;const s=document.createElement("span");s.className="tiny-star";s.textContent=["✦","✧","⋆"][i%3];s.style.left=x+"px";s.style.top=y+"px";s.style.animationDelay=(-Math.random()*3)+"s";document.body.appendChild(s)})}
-placeStars();window.addEventListener("resize",placeStars);window.addEventListener("load",placeStars);
+
 setInterval(()=>{if(Math.random()>.4)return;const h=document.createElement("span");h.className="floating-heart";h.textContent=["♡","♥"][Math.floor(Math.random()*2)];h.style.left=Math.random()*100+"vw";h.style.fontSize=(12+Math.random()*10)+"px";h.style.animationDuration=(8+Math.random()*5)+"s";document.body.appendChild(h);setTimeout(()=>h.remove(),14000)},1800);
 </script>
 </body>
