@@ -217,12 +217,20 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <button class="back-small" id="contribution-back-button" type="button">← Back</button>
 <div class="heart">💝</div><p class="eyebrow">Completely optional · No pressure</p>
 <h1>Help make our date <span>extra special</span></h1>
-<p class="question">If you’d like to contribute ₦30,000 toward our date, you can use the account details below. This is optional—saying yes to our date is already enough. ❤️</p>
+<p class="question">If you’d like to contribute toward our date, choose any amount below. This is completely optional—saying yes to our date is already enough. ❤️</p>
+<label class="field-label" for="contribution-amount" style="text-align:left">Choose your contribution 💝
+<select id="contribution-amount">
+<option value="10000">₦10,000</option>
+<option value="20000">₦20,000</option>
+<option value="30000" selected>₦30,000</option>
+<option value="40000">₦40,000</option>
+<option value="50000">₦50,000</option>
+</select></label>
 <div class="message" style="text-align:left;border:1px solid #ff9dc955;border-radius:16px;padding:16px;background:#160b1488">
 <strong>Account name:</strong> Jephthah Frank<br>
 <strong>Bank:</strong> Moniepoint<br>
 <strong>Account number:</strong> 8108373001<br><br>
-<strong>Amount:</strong> ₦30,000 (optional)
+<strong>Selected amount:</strong> <span id="selected-contribution-amount">₦30,000</span> (optional)
 </div>
 <label class="field-label" for="receipt-upload" style="text-align:left">Optional payment receipt upload 📎<input id="receipt-upload" type="file" accept="image/*,.pdf"></label>
 <p class="hint">The receipt stays in your browser; this page does not upload it to a server.</p>
@@ -310,6 +318,9 @@ document.getElementById("girlfriend-account-form").addEventListener("submit",fun
 
 document.getElementById("sweet-back-button").addEventListener("click",()=>showScreen("account-screen"));
 document.getElementById("contribution-button").addEventListener("click",()=>showScreen("contribution-screen"));
+const contributionAmount=document.getElementById("contribution-amount");
+const selectedContributionAmount=document.getElementById("selected-contribution-amount");
+contributionAmount.addEventListener("change",()=>{selectedContributionAmount.textContent="₦"+Number(contributionAmount.value).toLocaleString("en-NG");});
 document.getElementById("skip-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
 document.getElementById("contribution-back-button").addEventListener("click",()=>showScreen("sweet-note-screen"));
 document.getElementById("finish-with-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
