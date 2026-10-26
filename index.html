@@ -101,7 +101,7 @@ document.getElementById("date-time-form").addEventListener("submit",function(e){
  const prettyDate=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(chosenDate);
  const t=timeChoice.value.split(":").map(Number);
  const prettyTime=(t[0]%12||12)+":"+String(t[1]).padStart(2,"0")+" "+(t[0]>=12?"PM":"AM");
- dateResult.textContent="Yay! 🥹💕 Our date is set for "+prettyDate+" at "+prettyTime+" Nigerian time (WAT). I can't wait! ❤️";
+ dateResult.textContent="Oh, Princessa… 🥹👑❤️ You always choose the best time. As you wish, my love. 💕 Our date is set for "+prettyDate+" at "+prettyTime+" Nigerian time (WAT). I can’t wait to be with you. 🌹💋";
 });
 function placeStars(){const field=document.getElementById("star-field");if(!field)return;field.replaceChildren();const count=Math.min(100,Math.max(55,Math.floor(innerWidth*innerHeight/8500)));const card=document.querySelector(".card").getBoundingClientRect();let placed=0,attempts=0;while(placed<count&&attempts<count*8){attempts++;const x=Math.random()*innerWidth,y=Math.random()*innerHeight;if(x>card.left-5&&x<card.right+5&&y>card.top-5&&y<card.bottom+5)continue;const star=document.createElement("span");star.className="tiny-star";star.style.left=x+"px";star.style.top=y+"px";star.style.setProperty("--twinkle-delay",(Math.random()*5)+"s");star.style.setProperty("--twinkle-duration",(1.8+Math.random()*3.2)+"s");const size=1.5+Math.random()*2.5;star.style.width=size+"px";star.style.height=size+"px";field.appendChild(star);placed++}}
 placeStars();addEventListener("resize",placeStars);
