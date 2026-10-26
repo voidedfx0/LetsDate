@@ -503,20 +503,45 @@ document.getElementById('princessa-menu-upcoming').addEventListener('click',()=>
 document.querySelectorAll('.portal-logout').forEach(b=>b.addEventListener('click',()=>portalAuth.signOut()));
 document.getElementById('start-date-button').addEventListener('click',()=>{pendingDateRequestSaved=false;portalShow('question-screen')});
 document.getElementById('admin-requests').addEventListener('click',async e=>{
- const b=e.target.closest('[data-request-action]'); if(!b||!activePortalUser||activePortalUser.uid!==ADMIN_UID)return;
+ e.preventDefault();
+ const b=e.target.closest('[data-request-action]');
+ if(!b)return;
+ if(!activePortalUser){portalMessage('admin-status','Please log in again before managing requests.');return;}
+ if(activePortalUser.uid!==ADMIN_UID){
+   portalMessage('admin-status','This account does not have admin permission to change requests. Please log in with the owner/admin account.');
+   return;
+ }
  const id=b.dataset.requestId, action=b.dataset.requestAction;
+ if(!id||!action)return;
+ const originalText=b.textContent;
+ b.disabled=true;
+ b.textContent='Saving…';
+ portalMessage('admin-status','Saving request update…');
  try {
    let update={status:action,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
    if(action==='reschedule') {
      const date=prompt('Enter the suggested date (YYYY-MM-DD):');
-     if(!date)return;
+     if(!date){b.disabled=false;b.textContent=originalText;portalMessage('admin-status','Reschedule cancelled.');return;}
+     if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)){b.disabled=false;b.textContent=originalText;portalMessage('admin-status','Please use YYYY-MM-DD for the date.');return;}
      const time=prompt('Enter the suggested time (HH:MM, Nigerian time):');
-     if(!time)return;
+     if(!time){b.disabled=false;b.textContent=originalText;portalMessage('admin-status','Reschedule cancelled.');return;}
+     if(!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)){b.disabled=false;b.textContent=originalText;portalMessage('admin-status','Please use HH:MM for the time.');return;}
      update={status:'reschedule suggested',suggestedDate:date,suggestedTime:time,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
    }
    await portalDb.collection('dateRequests').doc(id).update(update);
+   portalMessage('admin-status','Saved successfully: '+(update.status==='reschedule suggested'?'new time suggested':update.status)+'. Refreshing requests…');
    await loadPortalRequests();
- } catch(err) { portalMessage('admin-status','Could not update request. Check the Firestore rules. ('+(err.code||'error')+')'); }
+ } catch(err) {
+   b.disabled=false;
+   b.textContent=originalText;
+   const messages={
+     'permission-denied':'Permission denied by Firestore. Confirm the admin UID in the website matches the UID in your Firebase Authentication account and that the published Firestore rules allow admin updates.',
+     'not-found':'This date request no longer exists. Refresh the requests list.',
+     'unavailable':'Firebase is temporarily unavailable. Check your internet connection and try again.',
+     'unauthenticated':'Your session has expired. Log out and log in again.'
+   };
+   portalMessage('admin-status','Could not save this change: '+(messages[err.code]||err.message||err.code||'Unknown error'));
+ }
 });
 portalAuth.onAuthStateChanged(async user=>{
  activePortalUser=user;
