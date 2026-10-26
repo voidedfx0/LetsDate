@@ -43,7 +43,7 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 @media(max-width:420px){.card{border-radius:23px;padding:24px 19px}.button-area{gap:10px}button{padding:12px 18px}}
 @media(prefers-reduced-motion:reduce){.heart{animation:none}.card{animation:float 5s ease-in-out infinite,cardGlow 3s ease-in-out infinite!important}}
 
-#receipt-upload{width:100%;padding:10px;border:1px solid #ff9dc977;border-radius:12px;background:#160b14;color:#fff4fa;font:inherit}
+#portal-auth-screen .date-time-form,#admin-dashboard-screen .date-time-form,#princessa-dashboard-screen .date-time-form{max-width:100%} .request-card{padding:14px;border:1px solid #ff9dc955;border-radius:15px;text-align:left;background:#160b1488;overflow-wrap:anywhere}.request-card h3{margin:0 0 8px;color:#ffc1dd}.request-card p{margin:6px 0;line-height:1.5}.request-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.request-actions button{padding:9px 12px;font-size:.85rem}#receipt-upload{width:100%;padding:10px;border:1px solid #ff9dc977;border-radius:12px;background:#160b14;color:#fff4fa;font:inherit}
 #contribution-screen .field-label{margin:18px 0}
 #sweet-note-screen .button-area{margin-top:10px}
 </style>
@@ -52,7 +52,33 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <div class="ambient a" aria-hidden="true"></div><div class="ambient b" aria-hidden="true"></div>
 <div class="star-field" id="star-field" aria-hidden="true"></div>
 <main class="card" aria-live="polite">
-<section id="question-screen">
+
+<section id="portal-auth-screen">
+<div class="heart">👑</div><p class="eyebrow">A private little love portal</p>
+<h1>Welcome, <span>my love</span> ❤️</h1>
+<p class="question">Sign in to continue, or create your own Princessa account.</p>
+<form id="portal-auth-form" class="date-time-form">
+<label class="field-label" for="portal-email">Email address<input id="portal-email" type="email" autocomplete="email" required></label>
+<label class="field-label" for="portal-password">Password<input id="portal-password" type="password" minlength="6" autocomplete="current-password" required></label>
+<button class="next" type="submit" id="portal-login-button">Log in 💌</button>
+<button class="secondary" type="button" id="portal-signup-button">Create Princessa account 👑</button>
+</form>
+<p class="date-result" id="portal-auth-result" aria-live="polite"></p>
+<p class="hint">Use your own email and password. Never share your password with anyone.</p>
+</section>
+<section id="admin-dashboard-screen" class="hidden">
+<div class="heart">🔐</div><p class="eyebrow">Private owner area</p><h1>Your <span>admin portal</span></h1>
+<p class="question">Welcome back, Jephthah. Here are the date requests.</p>
+<div class="button-area"><button class="secondary" id="admin-refresh-button" type="button">Refresh requests ↻</button><button class="secondary portal-logout" type="button">Log out</button></div>
+<p class="date-result" id="admin-status" aria-live="polite"></p><div id="admin-requests" class="date-time-form"></div>
+</section>
+<section id="princessa-dashboard-screen" class="hidden">
+<div class="heart">💗</div><p class="eyebrow">Your little love portal</p><h1>Welcome, <span>Princessa</span>!</h1>
+<p class="question">Your date requests and their latest status will appear here.</p>
+<div class="button-area"><button class="next" id="start-date-button" type="button">Plan our date 💌</button><button class="secondary" id="princessa-refresh-button" type="button">Refresh requests ↻</button><button class="secondary portal-logout" type="button">Log out</button></div>
+<p class="date-result" id="princessa-status" aria-live="polite"></p><div id="princessa-requests" class="date-time-form"></div>
+</section>
+<section id="question-screen" class="hidden">
 <div class="heart">♥</div><p class="eyebrow">A little question from my heart</p>
 <h1>Hey, <span>KHALEESI</span>…</h1>
 <p class="question" id="question-text">Will you go on a date with me? ❤️</p>
@@ -245,7 +271,7 @@ function placeStars(){const field=document.getElementById("star-field");if(!fiel
 placeStars();addEventListener("resize",placeStars);
 setInterval(()=>{if(Math.random()>.4)return;const h=document.createElement("span");h.className="floating-heart";h.textContent=["♡","♥"][Math.floor(Math.random()*2)];h.style.left=Math.random()*100+"vw";h.style.fontSize=(12+Math.random()*10)+"px";h.style.animationDuration=(8+Math.random()*5)+"s";document.body.appendChild(h);setTimeout(()=>h.remove(),14000)},1800);
 
-function showScreen(id){["question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","budget-screen","account-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function showScreen(id){["portal-auth-screen","admin-dashboard-screen","princessa-dashboard-screen","question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","budget-screen","account-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
 let previousLocationScreen="casual-location-screen";
 document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Janglover Park, Arcadia Games, Kiddies Fun World or Zone G… as you wish, Princessa! 🥹💕 "+document.getElementById("casual-location").value+" it is. I can’t wait for our adventure! ❤️";setTimeout(()=>{showScreen("budget-screen")},700)});
 document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+document.getElementById("elegant-location").value+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";setTimeout(()=>{showScreen("budget-screen")},700)});
@@ -315,5 +341,166 @@ document.getElementById("elegant-location-form").addEventListener("submit",funct
 });
 
 </script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCx2nMoFev3UZEGPfzdyq-WKGu1HK6c2Q4",
+  authDomain: "khaleesi-personal-portal.firebaseapp.com",
+  projectId: "khaleesi-personal-portal",
+  storageBucket: "khaleesi-personal-portal.firebasestorage.app",
+  messagingSenderId: "724581234518",
+  appId: "1:724581234518:web:eb146a99cfdcd5d9a248f7",
+  measurementId: "G-9EJ8RRYX9M"
+};
+firebase.initializeApp(firebaseConfig);
+const portalAuth = firebase.auth();
+const portalDb = firebase.firestore();
+const ADMIN_UID = 'DXMlTxS0YeS7sONyemv2Got4vVH3';
+let activePortalUser = null;
+let pendingDateRequestSaved = false;
+function portalShow(id) {
+  document.querySelectorAll('main.card > section').forEach(s => s.classList.add('hidden'));
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('hidden');
+}
+function portalMessage(id, msg) { const el=document.getElementById(id); if(el) el.textContent=msg; }
+document.getElementById('portal-auth-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  portalMessage('portal-auth-result','Signing you in…');
+  try {
+    await portalAuth.signInWithEmailAndPassword(
+      document.getElementById('portal-email').value.trim(),
+      document.getElementById('portal-password').value
+    );
+  } catch (err) {
+    portalMessage('portal-auth-result', portalFriendlyError(err));
+  }
+});
+document.getElementById('portal-signup-button').addEventListener('click', async () => {
+  const email=document.getElementById('portal-email').value.trim();
+  const password=document.getElementById('portal-password').value;
+  if(!email || password.length < 6) {
+    portalMessage('portal-auth-result','Enter your email and a password with at least 6 characters, then tap Create Princessa account.');
+    return;
+  }
+  portalMessage('portal-auth-result','Creating your account…');
+  try {
+    await portalAuth.createUserWithEmailAndPassword(email,password);
+  } catch(err) { portalMessage('portal-auth-result',portalFriendlyError(err)); }
+});
+function portalFriendlyError(err) {
+  const map={
+    'auth/invalid-email':'Please enter a valid email address.',
+    'auth/user-not-found':'No account was found for that email. Create an account first if this is Princessa.',
+    'auth/wrong-password':'That password is incorrect. Please try again.',
+    'auth/invalid-credential':'Email or password is incorrect.',
+    'auth/email-already-in-use':'An account already exists for this email. Please log in instead.',
+    'auth/weak-password':'Choose a stronger password with at least 6 characters.',
+    'auth/too-many-requests':'Too many attempts. Please wait a little and try again.',
+    'auth/network-request-failed':'Connection problem. Check your internet and try again.'
+  };
+  return map[err.code] || ('Could not complete that action ('+(err.code||'unknown error')+'). Please try again.');
+}
+function escapePortal(s) {
+  return String(s==null?'':s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function requestCard(doc, admin) {
+  const d=doc.data()||{};
+  const date=escapePortal(d.date), time=escapePortal(d.time), outfit=escapePortal(d.outfit),
+    location=escapePortal(d.location), budget=escapePortal(d.budget), status=escapePortal(d.status||'pending');
+  let actions='';
+  if(admin) {
+    actions='<div class="request-actions">'+
+      '<button class="primary" data-request-action="accepted" data-request-id="'+doc.id+'">Accept</button>'+
+      '<button class="secondary" data-request-action="declined" data-request-id="'+doc.id+'">Decline</button>'+
+      '<button class="secondary" data-request-action="reschedule" data-request-id="'+doc.id+'">Suggest new time</button>'+
+      '<button class="secondary" data-request-action="completed" data-request-id="'+doc.id+'">Mark completed</button></div>';
+  }
+  return '<article class="request-card"><h3>Date request</h3><p><strong>Date:</strong> '+date+' · '+time+'</p><p><strong>Outfit:</strong> '+outfit+'</p><p><strong>Location:</strong> '+location+'</p><p><strong>Clothing budget:</strong> ₦'+budget+'</p><p><strong>Status:</strong> '+status+'</p>'+actions+'</article>';
+}
+async function loadPortalRequests() {
+  if(!activePortalUser) return;
+  const admin=activePortalUser.uid===ADMIN_UID;
+  const target=admin?'admin-requests':'princessa-requests';
+  portalMessage(admin?'admin-status':'princessa-status','Loading requests…');
+  document.getElementById(target).innerHTML='';
+  try {
+    let snap;
+    if(admin) {
+      snap=await portalDb.collection('dateRequests').orderBy('createdAt','desc').limit(100).get();
+    } else {
+      snap=await portalDb.collection('dateRequests').where('userId','==',activePortalUser.uid).orderBy('createdAt','desc').limit(50).get();
+    }
+    if(snap.empty) {
+      portalMessage(admin?'admin-status':'princessa-status',admin?'No date requests yet. Princessa’s requests will appear here after she signs up and submits one.':'No date requests yet. Tap “Plan our date” when you are ready, my love. 💕');
+      return;
+    }
+    document.getElementById(target).innerHTML=snap.docs.map(doc=>requestCard(doc,admin)).join('');
+    portalMessage(admin?'admin-status':'princessa-status','Showing '+snap.size+' request(s).');
+  } catch(err) {
+    portalMessage(admin?'admin-status':'princessa-status','Could not load requests. Check Firestore rules and indexes, then try again. ('+(err.code||'error')+')');
+  }
+}
+document.getElementById('admin-refresh-button').addEventListener('click',loadPortalRequests);
+document.getElementById('princessa-refresh-button').addEventListener('click',loadPortalRequests);
+document.querySelectorAll('.portal-logout').forEach(b=>b.addEventListener('click',()=>portalAuth.signOut()));
+document.getElementById('start-date-button').addEventListener('click',()=>{pendingDateRequestSaved=false;portalShow('question-screen')});
+document.getElementById('admin-requests').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-request-action]'); if(!b||!activePortalUser||activePortalUser.uid!==ADMIN_UID)return;
+ const id=b.dataset.requestId, action=b.dataset.requestAction;
+ try {
+   let update={status:action,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+   if(action==='reschedule') {
+     const date=prompt('Enter the suggested date (YYYY-MM-DD):');
+     if(!date)return;
+     const time=prompt('Enter the suggested time (HH:MM, Nigerian time):');
+     if(!time)return;
+     update={status:'reschedule suggested',suggestedDate:date,suggestedTime:time,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+   }
+   await portalDb.collection('dateRequests').doc(id).update(update);
+   await loadPortalRequests();
+ } catch(err) { portalMessage('admin-status','Could not update request. Check the Firestore rules. ('+(err.code||'error')+')'); }
+});
+portalAuth.onAuthStateChanged(async user=>{
+ activePortalUser=user;
+ if(!user){portalShow('portal-auth-screen');return;}
+ if(user.uid===ADMIN_UID){portalShow('admin-dashboard-screen');await loadPortalRequests();}
+ else {portalShow('princessa-dashboard-screen');await loadPortalRequests();}
+});
+async function saveOnlineDateRequest() {
+ if(!activePortalUser) throw new Error('Please sign in again before submitting your date request.');
+ const outfit=readSiteMemory().outfit || (document.getElementById('casual-location').value ? 'Casual' : 'Well dressed');
+ const location=readSiteMemory().location || document.getElementById('casual-location').value || document.getElementById('elegant-location').value;
+ const budget=Number(document.getElementById('clothing-budget').value);
+ if(!dateChoice.value||!timeChoice.value||!location||!budget) throw new Error('Please complete your date, location, outfit, and budget choices first.');
+ await portalDb.collection('dateRequests').add({
+   userId:activePortalUser.uid,
+   date:dateChoice.value,
+   time:timeChoice.value,
+   outfit:outfit,
+   location:location,
+   budget:budget,
+   status:'pending',
+   createdAt:firebase.firestore.FieldValue.serverTimestamp()
+ });
+ pendingDateRequestSaved=true;
+}
+document.getElementById('final-confirm-button').addEventListener('click',async()=>{
+ if(!activePortalUser){portalShow('portal-auth-screen');return;}
+ if(pendingDateRequestSaved){portalShow(activePortalUser.uid===ADMIN_UID?'admin-dashboard-screen':'princessa-dashboard-screen');return;}
+ portalMessage('princessa-status','');
+ try {
+   await saveOnlineDateRequest();
+   showScreen('last-screen');
+   heartBurst();
+ } catch(err) {
+   alert('Your date request could not be saved online yet. '+(err.message||'Please check your connection and try again.'));
+ }
+});
+</script>
+
 </body>
 </html>
