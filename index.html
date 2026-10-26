@@ -47,6 +47,18 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 #contribution-screen .field-label{margin:18px 0}
 #sweet-note-screen .button-area{margin-top:10px}
 .portal-toolbar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 16px}.portal-menu{position:relative;z-index:5}.portal-menu summary{list-style:none;cursor:pointer;padding:11px 14px;border:1px solid #ff9dc977;border-radius:999px;background:#ffffff08;color:#ffe5f0;font-size:.9rem;font-weight:650}.portal-menu summary::-webkit-details-marker{display:none}.portal-menu-items{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:8px;border:1px solid #ff9dc977;border-radius:15px;background:#21111e;box-shadow:0 12px 30px #0008;display:grid;gap:6px}.portal-menu-items button{width:100%;padding:10px 12px;text-align:left;border-radius:10px;background:#ffffff08;border:1px solid #ff9dc933;color:#ffe5f0;font-size:.88rem}.portal-menu-items button:hover{background:#ff4b8a22}</style>
+
+<style>
+#love-disc-button{position:fixed;right:14px;bottom:14px;z-index:50;width:48px;height:48px;padding:0;border:2px solid #ffb6d7;border-radius:50%;background:radial-gradient(circle at center,#ffd6e8 0 8%,#b82c68 9% 16%,#f6a3c7 17% 23%,#24111e 24% 29%,#d84482 30% 100%);box-shadow:0 4px 18px #0008,0 0 16px #ff5c9a44;display:grid;place-items:center;color:#fff;cursor:pointer}
+#love-disc-button::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff1f7;border:2px solid #6f2044;box-shadow:0 0 0 2px #ffd4e7}
+#love-disc-button.is-playing{animation:love-disc-spin 3s linear infinite}
+#love-disc-button:focus-visible{outline:2px solid white;outline-offset:4px}
+#love-disc-button .music-state{position:absolute;right:53px;bottom:8px;white-space:nowrap;background:#21111eeb;border:1px solid #ff9dc955;border-radius:999px;padding:5px 9px;font-size:11px;color:#ffe5f0;opacity:0;pointer-events:none;transition:opacity .2s}
+#love-disc-button:focus-visible .music-state,#love-disc-button:hover .music-state{opacity:1}
+@keyframes love-disc-spin{to{transform:rotate(360deg)}}
+@media(max-width:480px){#love-disc-button{right:10px;bottom:10px;width:42px;height:42px}}
+@media(prefers-reduced-motion:reduce){#love-disc-button.is-playing{animation:none}}
+</style>
 </head>
 <body>
 <div class="ambient a" aria-hidden="true"></div><div class="ambient b" aria-hidden="true"></div>
@@ -508,5 +520,39 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
 });
 </script>
 
+
+<audio id="love-background-audio" preload="auto" loop>
+  <source src="./forever-remix.mp3" type="audio/mpeg">
+</audio>
+<button id="love-disc-button" type="button" aria-label="Play background music" aria-pressed="false" title="Play or pause music">
+  <span class="music-state" id="love-disc-state">Play music</span>
+</button>
+<script>
+(function(){
+ const audio=document.getElementById('love-background-audio');
+ const button=document.getElementById('love-disc-button');
+ const label=document.getElementById('love-disc-state');
+ if(!audio||!button||!label)return;
+ audio.volume=0.5;
+ function updateMusicUI(){
+   const playing=!audio.paused&&!audio.ended;
+   button.classList.toggle('is-playing',playing);
+   button.setAttribute('aria-pressed',String(playing));
+   button.setAttribute('aria-label',playing?'Pause background music':'Play background music');
+   button.title=playing?'Pause music':'Play music';
+   label.textContent=playing?'Pause music':'Play music';
+ }
+ button.addEventListener('click',async function(){
+   if(!audio.paused){audio.pause();updateMusicUI();return;}
+   try{audio.volume=0.5;await audio.play();updateMusicUI();}
+   catch(err){label.textContent='Song file not found';button.setAttribute('aria-label','Music could not play. Check the audio file.');}
+ });
+ audio.addEventListener('play',updateMusicUI);
+ audio.addEventListener('pause',updateMusicUI);
+ audio.addEventListener('ended',updateMusicUI);
+ audio.addEventListener('error',function(){label.textContent='Add forever-remix.mp3';});
+ audio.play().then(updateMusicUI).catch(updateMusicUI);
+})();
+</script>
 </body>
 </html>
