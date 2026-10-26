@@ -534,6 +534,7 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
  const label=document.getElementById('love-disc-state');
  if(!audio||!button||!label)return;
  audio.volume=0.5;
+ let userHasPaused=false;
  function updateMusicUI(){
    const playing=!audio.paused&&!audio.ended;
    button.classList.toggle('is-playing',playing);
@@ -543,15 +544,25 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
    label.textContent=playing?'Pause music':'Play music';
  }
  button.addEventListener('click',async function(){
-   if(!audio.paused){audio.pause();updateMusicUI();return;}
+   if(!audio.paused){userHasPaused=true;audio.pause();updateMusicUI();return;}
+   userHasPaused=false;
    try{audio.volume=0.5;await audio.play();updateMusicUI();}
-   catch(err){label.textContent='Song file not found';button.setAttribute('aria-label','Music could not play. Check the uploaded song file.');}
+   catch(err){label.textContent='Tap to play music';button.setAttribute('aria-label','Tap to play background music.');}
  });
  audio.addEventListener('play',updateMusicUI);
  audio.addEventListener('pause',updateMusicUI);
  audio.addEventListener('ended',updateMusicUI);
  audio.addEventListener('error',function(){label.textContent='Song file unavailable';});
- audio.play().then(updateMusicUI).catch(updateMusicUI);
+ // Attempt autoplay on load, and retry on the first visitor interaction if the browser blocks it.
+ function attemptAutoplay(){
+   if(userHasPaused||!audio.paused)return;
+   audio.volume=0.5;
+   audio.play().then(updateMusicUI).catch(updateMusicUI);
+ }
+ attemptAutoplay();
+ ['pointerdown','touchstart','keydown'].forEach(function(eventName){
+   document.addEventListener(eventName,attemptAutoplay,{once:true,passive:true});
+ });
 })();
 </script>
 </body>
