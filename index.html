@@ -478,7 +478,7 @@ async function loadPortalRequests() {
   try {
     let snap;
     if(admin) {
-      snap=await portalDb.collection('dateRequests').limit(100).get();
+      snap=await portalDb.collection('dateRequests').limit(100).get({source:'server'});
     } else {
       snap=await portalDb.collection('dateRequests').where('userId','==',activePortalUser.uid).limit(50).get();
     }
