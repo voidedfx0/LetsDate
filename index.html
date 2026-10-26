@@ -71,8 +71,23 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <button class="next" type="submit">That works for me 💕</button>
 </form>
 <p class="date-result" id="date-result" aria-live="polite"></p>
+<button class="next hidden" id="next-outfit-button" type="button">Next question, Princessa 💌</button>
 <button class="back-small" id="back-button" type="button">Back to Question 1 ↺</button><div class="progress">OUR DATE, OUR LITTLE MEMORY ♥</div>
 </section>
+
+<section id="outfit-screen" class="hidden">
+<button class="back-small" id="outfit-back-button" type="button">← Back</button>
+<div class="heart">👗</div><p class="eyebrow">Question 03 · Looking good for you</p>
+<h1>My <span>Princessa</span>…</h1>
+<p class="question">What would you like to wear for our date, my love? 🥹❤️</p>
+<div class="date-time-form outfit-options" role="group" aria-label="Choose your date outfit">
+<button class="next outfit-choice" type="button" data-outfit="Casual">Casual and cute 👟💕</button>
+<button class="next outfit-choice" type="button" data-outfit="Well dressed">Well dressed and elegant 👗✨</button>
+</div>
+<p class="date-result" id="outfit-result" aria-live="polite"></p>
+<div class="progress">YOUR STYLE, YOUR CHOICE ♥</div>
+</section>
+
 </main>
 <script>
 const loveMessage="My love, ❤️🥹\n\nYou have no idea how happy you make me. Just the thought of spending a beautiful moment with you makes me smile. 💕🌹\n\nIf I could choose one place to be, it would be right beside you. I want to see your smile, hear your laughter, look into your eyes, and create beautiful memories together.\n\nYou and me, a date to remember. 🌹❤️";
@@ -89,6 +104,13 @@ document.getElementById("next-button").addEventListener("click",()=>{messageScre
 document.getElementById("message-back-button").addEventListener("click",resetQuestion);
 document.getElementById("later-back-button").addEventListener("click",()=>{laterScreen.classList.add("hidden");messageScreen.classList.remove("hidden")});
 document.getElementById("back-button").addEventListener("click",resetQuestion);
+document.getElementById("next-outfit-button").addEventListener("click",()=>{laterScreen.classList.add("hidden");document.getElementById("outfit-screen").classList.remove("hidden")});
+document.getElementById("outfit-back-button").addEventListener("click",()=>{document.getElementById("outfit-screen").classList.add("hidden");laterScreen.classList.remove("hidden")});
+document.querySelectorAll(".outfit-choice").forEach(button=>button.addEventListener("click",()=>{
+ const choice=button.dataset.outfit;
+ document.getElementById("outfit-result").textContent=choice==="Casual"?"Casual and cute it is, my Princessa! 🥹💕 Whatever you wear, you’ll be the most beautiful person there. ❤️":"Well dressed and elegant, just like my queen! 👑✨ Whatever you wear, you’ll be the most beautiful person there. ❤️";
+ document.querySelectorAll(".outfit-choice").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+}));
 const dateChoice=document.getElementById("date-choice");
 const timeChoice=document.getElementById("time-choice");
 const dateResult=document.getElementById("date-result");
@@ -102,6 +124,7 @@ document.getElementById("date-time-form").addEventListener("submit",function(e){
  const t=timeChoice.value.split(":").map(Number);
  const prettyTime=(t[0]%12||12)+":"+String(t[1]).padStart(2,"0")+" "+(t[0]>=12?"PM":"AM");
  dateResult.textContent="Oh, Princessa… 🥹👑❤️ You always choose the best time. As you wish, my love. 💕 Our date is set for "+prettyDate+" at "+prettyTime+" Nigerian time (WAT). I can’t wait to be with you. 🌹💋";
+ document.getElementById("next-outfit-button").classList.remove("hidden");
 });
 function placeStars(){const field=document.getElementById("star-field");if(!field)return;field.replaceChildren();const count=Math.min(100,Math.max(55,Math.floor(innerWidth*innerHeight/8500)));const card=document.querySelector(".card").getBoundingClientRect();let placed=0,attempts=0;while(placed<count&&attempts<count*8){attempts++;const x=Math.random()*innerWidth,y=Math.random()*innerHeight;if(x>card.left-5&&x<card.right+5&&y>card.top-5&&y<card.bottom+5)continue;const star=document.createElement("span");star.className="tiny-star";star.style.left=x+"px";star.style.top=y+"px";star.style.setProperty("--twinkle-delay",(Math.random()*5)+"s");star.style.setProperty("--twinkle-duration",(1.8+Math.random()*3.2)+"s");const size=1.5+Math.random()*2.5;star.style.width=size+"px";star.style.height=size+"px";field.appendChild(star);placed++}}
 placeStars();addEventListener("resize",placeStars);
