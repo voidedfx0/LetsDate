@@ -144,16 +144,20 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 </section>
 <section id="account-screen" class="hidden">
 <button class="back-small" id="account-back-button" type="button">← Back</button>
-<div class="heart">💌</div><p class="eyebrow">For your date outfit</p>
-<h1>For you, <span>my love</span></h1>
-<p class="question">Here are the account details for the clothing money. ❤️</p>
-<div class="message" style="text-align:left;border:1px solid #ff9dc955;border-radius:16px;padding:16px;background:#160b1488">
-<strong>Account name:</strong> Jephthah Frank<br>
-<strong>Bank:</strong> Moniepoint<br>
-<strong>Account number:</strong> 8108373001
-</div>
-<p class="message">You deserve to feel beautiful and confident, Princessa. 🥹💕</p>
-<button class="next" id="sweet-note-button" type="button">One more sweet message 💌</button>
+<div class="heart">💌</div><p class="eyebrow">One little detail · For your date outfit</p>
+<h1>Your account <span>details</span></h1>
+<p class="question">My Princessa, please enter the account details where you’d like the clothing money sent. ❤️</p>
+<form class="date-time-form" id="girlfriend-account-form">
+<label class="field-label" for="girlfriend-account-name">Account name
+<input id="girlfriend-account-name" name="accountName" type="text" autocomplete="name" placeholder="Enter account name" required></label>
+<label class="field-label" for="girlfriend-bank-name">Bank name
+<input id="girlfriend-bank-name" name="bankName" type="text" placeholder="Enter bank name" required></label>
+<label class="field-label" for="girlfriend-account-number">Account number
+<input id="girlfriend-account-number" name="accountNumber" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]{10}" maxlength="10" minlength="10" placeholder="Enter 10-digit account number" required></label>
+<p class="hint">These details are not sent or saved anywhere by this webpage.</p>
+<button class="next" type="submit">Continue, my love 💕</button>
+</form>
+<p class="date-result" id="girlfriend-account-result" aria-live="polite"></p>
 </section>
 <section id="sweet-note-screen" class="hidden">
 <button class="back-small" id="sweet-back-button" type="button">← Back</button>
@@ -247,7 +251,17 @@ document.getElementById("elegant-location-form").addEventListener("submit",funct
 document.getElementById("budget-form").addEventListener("submit",function(e){e.preventDefault();const amount=Number(document.getElementById("clothing-budget").value);const result=document.getElementById("budget-result");if(!amount)return;if(amount>5000){result.textContent="You little thief 😂, choose something lower joor! 🤣💕 Try ₦1,000 to ₦5,000, my Princessa.";return;}result.textContent="Awww, okay my love! 💕";setTimeout(()=>showScreen("account-screen"),650)});
 document.getElementById("budget-back-button").addEventListener("click",()=>showScreen(previousLocationScreen));
 document.getElementById("account-back-button").addEventListener("click",()=>showScreen("budget-screen"));
-document.getElementById("sweet-note-button").addEventListener("click",()=>showScreen("sweet-note-screen"));
+
+document.getElementById("girlfriend-account-form").addEventListener("submit",function(e){
+ e.preventDefault();
+ const name=document.getElementById("girlfriend-account-name").value.trim();
+ const bank=document.getElementById("girlfriend-bank-name").value.trim();
+ const number=document.getElementById("girlfriend-account-number").value.trim();
+ if(!name||!bank||!/^[0-9]{10}$/.test(number)){document.getElementById("girlfriend-account-result").textContent="Please fill in all fields and enter a valid 10-digit account number. 💗";return;}
+ document.getElementById("girlfriend-account-result").textContent="Thank you, Princessa! 💕 Your details are entered on this page. They have not been sent anywhere.";
+ setTimeout(()=>showScreen("sweet-note-screen"),900);
+});
+
 document.getElementById("sweet-back-button").addEventListener("click",()=>showScreen("account-screen"));
 document.getElementById("contribution-button").addEventListener("click",()=>showScreen("contribution-screen"));
 document.getElementById("skip-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
