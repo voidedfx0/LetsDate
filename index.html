@@ -42,6 +42,10 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 @keyframes rise{15%{opacity:.55}100%{transform:translateY(-110svh);opacity:0}}
 @media(max-width:420px){.card{border-radius:23px;padding:24px 19px}.button-area{gap:10px}button{padding:12px 18px}}
 @media(prefers-reduced-motion:reduce){.heart{animation:none}.card{animation:float 5s ease-in-out infinite,cardGlow 3s ease-in-out infinite!important}}
+
+#receipt-upload{width:100%;padding:10px;border:1px solid #ff9dc977;border-radius:12px;background:#160b14;color:#fff4fa;font:inherit}
+#contribution-screen .field-label{margin:18px 0}
+#sweet-note-screen .button-area{margin-top:10px}
 </style>
 </head>
 <body>
@@ -122,6 +126,71 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 </section>
 
 
+<section id="budget-screen" class="hidden">
+<button class="back-small" id="budget-back-button" type="button">← Back</button>
+<div class="heart">👛</div><p class="eyebrow">A tiny style budget · Question 04</p>
+<h1>Let’s get you <span>date-ready</span></h1>
+<p class="question">My Princessa, how much would you like for your outfit? 💕</p>
+<form class="date-time-form" id="budget-form">
+<label class="field-label" for="clothing-budget">Choose your clothing budget 💸
+<select id="clothing-budget" required>
+<option value="" disabled selected>Choose an amount…</option>
+<option value="1000">₦1,000</option><option value="2000">₦2,000</option><option value="3000">₦3,000</option><option value="4000">₦4,000</option><option value="5000">₦5,000</option><option value="6000">₦6,000</option><option value="7000">₦7,000</option><option value="8000">₦8,000</option><option value="9000">₦9,000</option><option value="10000">₦10,000</option><option value="11000">₦11,000</option><option value="12000">₦12,000</option><option value="13000">₦13,000</option><option value="14000">₦14,000</option><option value="15000">₦15,000</option><option value="16000">₦16,000</option><option value="17000">₦17,000</option><option value="18000">₦18,000</option><option value="19000">₦19,000</option><option value="20000">₦20,000</option>
+</select></label>
+<button class="next" type="submit">That’s my budget 💕</button>
+</form>
+<p class="date-result" id="budget-result" aria-live="polite"></p>
+<div class="progress">LOOKING CUTE FOR OUR DATE ♥</div>
+</section>
+<section id="account-screen" class="hidden">
+<button class="back-small" id="account-back-button" type="button">← Back</button>
+<div class="heart">💌</div><p class="eyebrow">For your date outfit</p>
+<h1>For you, <span>my love</span></h1>
+<p class="question">Here are the account details for the clothing money. ❤️</p>
+<div class="message" style="text-align:left;border:1px solid #ff9dc955;border-radius:16px;padding:16px;background:#160b1488">
+<strong>Account name:</strong> Jephthah Frank<br>
+<strong>Bank:</strong> Moniepoint<br>
+<strong>Account number:</strong> 8108373001
+</div>
+<p class="message">You deserve to feel beautiful and confident, Princessa. 🥹💕</p>
+<button class="next" id="sweet-note-button" type="button">One more sweet message 💌</button>
+</section>
+<section id="sweet-note-screen" class="hidden">
+<button class="back-small" id="sweet-back-button" type="button">← Back</button>
+<div class="heart">🌹</div><p class="eyebrow">Just for my queen</p>
+<h1>See you soon, <span>my love</span></h1>
+<p class="message">See you soon for our date, okay? 🥹❤️ I’m already looking forward to your smile, your laughter, and making a beautiful memory with you. You’re my queen, Princessa. 👑💕</p>
+<button class="next" id="contribution-button" type="button">A little date contribution? 💌</button>
+<button class="secondary" id="skip-contribution-button" type="button">Skip and continue 💗</button>
+</section>
+<section id="contribution-screen" class="hidden">
+<button class="back-small" id="contribution-back-button" type="button">← Back</button>
+<div class="heart">💝</div><p class="eyebrow">Completely optional · No pressure</p>
+<h1>Help make our date <span>extra special</span></h1>
+<p class="question">If you’d like to contribute ₦30,000 toward our date, you can use the account details below. This is optional—saying yes to our date is already enough. ❤️</p>
+<div class="message" style="text-align:left;border:1px solid #ff9dc955;border-radius:16px;padding:16px;background:#160b1488">
+<strong>Account name:</strong> Jephthah Frank<br>
+<strong>Bank:</strong> Moniepoint<br>
+<strong>Account number:</strong> 8108373001<br><br>
+<strong>Amount:</strong> ₦30,000 (optional)
+</div>
+<label class="field-label" for="receipt-upload" style="text-align:left">Optional payment receipt upload 📎<input id="receipt-upload" type="file" accept="image/*,.pdf"></label>
+<p class="hint">The receipt stays in your browser; this page does not upload it to a server.</p>
+<button class="next" id="finish-with-contribution-button" type="button">Continue 💕</button>
+<button class="secondary" id="skip-payment-button" type="button">I’ll skip the contribution 💗</button>
+</section>
+<section id="final-screen" class="hidden">
+<div class="heart">💗</div><p class="eyebrow">A little memory for us</p>
+<h1>Thank you, <span>my queen!</span></h1>
+<p class="message">Thank you for accepting to go on a date with me, my love. ❤️🥹 I can’t wait to spend time with you and make this date special. 🌹</p>
+<button class="next" id="final-confirm-button" type="button">Confirm, my love 💖</button>
+</section>
+<section id="last-screen" class="hidden">
+<div class="heart">👑</div><p class="eyebrow">Always and forever</p>
+<h1>Thank you, <span>my queen</span>!</h1>
+<p class="message">Thank you, and I love you, my queen! 👑❤️😘</p>
+</section>
+
 </main>
 <script>
 const loveMessage="My love, ❤️🥹\n\nYou have no idea how happy you make me. Just the thought of spending a beautiful moment with you makes me smile. 💕🌹\n\nIf I could choose one place to be, it would be right beside you. I want to see your smile, hear your laughter, look into your eyes, and create beautiful memories together.\n\nYou and me, a date to remember. 🌹❤️";
@@ -151,14 +220,7 @@ document.querySelectorAll(".location-back").forEach(button=>button.addEventListe
  document.getElementById("elegant-location-screen").classList.add("hidden");
  document.getElementById(button.dataset.back).classList.remove("hidden");
 }));
-document.getElementById("casual-location-form").addEventListener("submit",function(e){
- e.preventDefault();
- document.getElementById("casual-location-result").textContent="Janglover Park, Arcadia Games, Kiddies Fun World or Zone G… as you wish, Princessa! 🥹💕 "+document.getElementById("casual-location").value+" it is. I can’t wait for our adventure! ❤️";
-});
-document.getElementById("elegant-location-form").addEventListener("submit",function(e){
- e.preventDefault();
- document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+document.getElementById("elegant-location").value+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";
-});
+
 const dateChoice=document.getElementById("date-choice");
 const timeChoice=document.getElementById("time-choice");
 const dateResult=document.getElementById("date-result");
@@ -177,6 +239,23 @@ document.getElementById("date-time-form").addEventListener("submit",function(e){
 function placeStars(){const field=document.getElementById("star-field");if(!field)return;field.replaceChildren();const count=Math.min(100,Math.max(55,Math.floor(innerWidth*innerHeight/8500)));const card=document.querySelector(".card").getBoundingClientRect();let placed=0,attempts=0;while(placed<count&&attempts<count*8){attempts++;const x=Math.random()*innerWidth,y=Math.random()*innerHeight;if(x>card.left-5&&x<card.right+5&&y>card.top-5&&y<card.bottom+5)continue;const star=document.createElement("span");star.className="tiny-star";star.style.left=x+"px";star.style.top=y+"px";star.style.setProperty("--twinkle-delay",(Math.random()*5)+"s");star.style.setProperty("--twinkle-duration",(1.8+Math.random()*3.2)+"s");const size=1.5+Math.random()*2.5;star.style.width=size+"px";star.style.height=size+"px";field.appendChild(star);placed++}}
 placeStars();addEventListener("resize",placeStars);
 setInterval(()=>{if(Math.random()>.4)return;const h=document.createElement("span");h.className="floating-heart";h.textContent=["♡","♥"][Math.floor(Math.random()*2)];h.style.left=Math.random()*100+"vw";h.style.fontSize=(12+Math.random()*10)+"px";h.style.animationDuration=(8+Math.random()*5)+"s";document.body.appendChild(h);setTimeout(()=>h.remove(),14000)},1800);
+
+function showScreen(id){["question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","budget-screen","account-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+let previousLocationScreen="casual-location-screen";
+document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Janglover Park, Arcadia Games, Kiddies Fun World or Zone G… as you wish, Princessa! 🥹💕 "+document.getElementById("casual-location").value+" it is. I can’t wait for our adventure! ❤️";setTimeout(()=>{showScreen("budget-screen")},700)});
+document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+document.getElementById("elegant-location").value+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";setTimeout(()=>{showScreen("budget-screen")},700)});
+document.getElementById("budget-form").addEventListener("submit",function(e){e.preventDefault();const amount=Number(document.getElementById("clothing-budget").value);const result=document.getElementById("budget-result");if(!amount)return;if(amount>5000){result.textContent="You little thief 😂, choose something lower joor! 🤣💕 Try ₦1,000 to ₦5,000, my Princessa.";return;}result.textContent="Awww, okay my love! 💕";setTimeout(()=>showScreen("account-screen"),650)});
+document.getElementById("budget-back-button").addEventListener("click",()=>showScreen(previousLocationScreen));
+document.getElementById("account-back-button").addEventListener("click",()=>showScreen("budget-screen"));
+document.getElementById("sweet-note-button").addEventListener("click",()=>showScreen("sweet-note-screen"));
+document.getElementById("sweet-back-button").addEventListener("click",()=>showScreen("account-screen"));
+document.getElementById("contribution-button").addEventListener("click",()=>showScreen("contribution-screen"));
+document.getElementById("skip-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
+document.getElementById("contribution-back-button").addEventListener("click",()=>showScreen("sweet-note-screen"));
+document.getElementById("finish-with-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
+document.getElementById("skip-payment-button").addEventListener("click",()=>showScreen("final-screen"));
+document.getElementById("final-confirm-button").addEventListener("click",()=>{showScreen("last-screen");heartBurst()});
+
 </script>
 </body>
 </html>
