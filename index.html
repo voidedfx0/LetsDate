@@ -75,6 +75,7 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <button class="next" type="submit">That works for me 💕</button>
 </form>
 <p class="date-result" id="date-result" aria-live="polite"></p>
+<button class="secondary hidden" id="reschedule-button" type="button">Change date or time ↻</button>
 <button class="next hidden" id="next-outfit-button" type="button">Next question, Princessa 💌</button>
 <button class="back-small" id="back-button" type="button">Back to Question 1 ↺</button><div class="progress">OUR DATE, OUR LITTLE MEMORY ♥</div>
 </section>
@@ -269,6 +270,49 @@ document.getElementById("contribution-back-button").addEventListener("click",()=
 document.getElementById("finish-with-contribution-button").addEventListener("click",()=>showScreen("final-screen"));
 document.getElementById("skip-payment-button").addEventListener("click",()=>showScreen("final-screen"));
 document.getElementById("final-confirm-button").addEventListener("click",()=>{showScreen("last-screen");heartBurst()});
+
+
+/* Remember choices in this browser and allow the date to be rescheduled. */
+const memoryKey="letsDatePrincessaMemoryV1";
+function readSiteMemory(){try{return JSON.parse(localStorage.getItem(memoryKey)||"{}")}catch(e){return {}}}
+function writeSiteMemory(patch){const old=readSiteMemory();const next={...old,...patch,updatedAt:new Date().toISOString()};try{localStorage.setItem(memoryKey,JSON.stringify(next));return true}catch(e){return false}}
+function rememberDateChoice(){
+ if(!dateChoice.value||!timeChoice.value)return;
+ const history=readSiteMemory().dateRequests||[];
+ history.push({date:dateChoice.value,time:timeChoice.value,createdAt:new Date().toISOString()});
+ writeSiteMemory({date:dateChoice.value,time:timeChoice.value,dateRequests:history.slice(-20)});
+}
+document.getElementById("date-time-form").addEventListener("submit",function(){
+ setTimeout(()=>{
+  if(dateChoice.value&&timeChoice.value){
+   rememberDateChoice();
+   document.getElementById("reschedule-button").classList.remove("hidden");
+  }
+ },0);
+});
+document.getElementById("reschedule-button").addEventListener("click",()=>{
+ const saved=readSiteMemory();
+ if(saved.date)dateChoice.value=saved.date;
+ if(saved.time)timeChoice.value=saved.time;
+ document.getElementById("date-result").textContent="No problem, Princessa 💕 Change the date or time below and confirm again.";
+ document.getElementById("next-outfit-button").classList.add("hidden");
+ document.getElementById("date-time-form").scrollIntoView({behavior:"smooth",block:"center"});
+});
+const savedDateMemory=readSiteMemory();
+if(savedDateMemory.date&&savedDateMemory.time){
+ dateChoice.value=savedDateMemory.date;
+ timeChoice.value=savedDateMemory.time;
+ document.getElementById("reschedule-button").classList.remove("hidden");
+}
+document.getElementById("date-time-form").addEventListener("submit",function(){
+ if(dateChoice.value&&timeChoice.value)writeSiteMemory({date:dateChoice.value,time:timeChoice.value});
+});
+document.getElementById("casual-location-form").addEventListener("submit",function(){
+ writeSiteMemory({outfit:"Casual",location:document.getElementById("casual-location").value});
+});
+document.getElementById("elegant-location-form").addEventListener("submit",function(){
+ writeSiteMemory({outfit:"Well dressed",location:document.getElementById("elegant-location").value});
+});
 
 </script>
 </body>
