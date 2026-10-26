@@ -522,7 +522,7 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
 
 
 <audio id="love-background-audio" preload="auto" loop>
-  <source src="./forever-remix.mp3" type="audio/mpeg">
+  <source src="./Gyakie-Ft.-Omah-Lay-%E2%80%93-Forever-Remix.mp3" type="audio/mpeg">
 </audio>
 <button id="love-disc-button" type="button" aria-label="Play background music" aria-pressed="false" title="Play or pause music">
   <span class="music-state" id="love-disc-state">Play music</span>
@@ -545,12 +545,12 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
  button.addEventListener('click',async function(){
    if(!audio.paused){audio.pause();updateMusicUI();return;}
    try{audio.volume=0.5;await audio.play();updateMusicUI();}
-   catch(err){label.textContent='Song file not found';button.setAttribute('aria-label','Music could not play. Check the audio file.');}
+   catch(err){label.textContent='Song file not found';button.setAttribute('aria-label','Music could not play. Check the uploaded song file.');}
  });
  audio.addEventListener('play',updateMusicUI);
  audio.addEventListener('pause',updateMusicUI);
  audio.addEventListener('ended',updateMusicUI);
- audio.addEventListener('error',function(){label.textContent='Add forever-remix.mp3';});
+ audio.addEventListener('error',function(){label.textContent='Song file unavailable';});
  audio.play().then(updateMusicUI).catch(updateMusicUI);
 })();
 </script>
