@@ -258,7 +258,7 @@ document.getElementById("girlfriend-account-form").addEventListener("submit",fun
  const bank=document.getElementById("girlfriend-bank-name").value.trim();
  const number=document.getElementById("girlfriend-account-number").value.trim();
  if(!name||!bank||!/^[0-9]{10}$/.test(number)){document.getElementById("girlfriend-account-result").textContent="Please fill in all fields and enter a valid 10-digit account number. 💗";return;}
- document.getElementById("girlfriend-account-result").textContent="Thank you, Princessa! 💕 Your details are entered on this page. They have not been sent anywhere.";
+ document.getElementById("girlfriend-account-result").textContent="Thank you, Princessa! 💕 You will receive your money soon, my princess. 👑❤️ (Your details stay on this page and are not sent automatically.)";
  setTimeout(()=>showScreen("sweet-note-screen"),900);
 });
 
