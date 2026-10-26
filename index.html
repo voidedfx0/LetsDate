@@ -49,6 +49,13 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 .portal-toolbar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 16px}.portal-menu{position:relative;z-index:5}.portal-menu summary{list-style:none;cursor:pointer;padding:11px 14px;border:1px solid #ff9dc977;border-radius:999px;background:#ffffff08;color:#ffe5f0;font-size:.9rem;font-weight:650}.portal-menu summary::-webkit-details-marker{display:none}.portal-menu-items{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:8px;border:1px solid #ff9dc977;border-radius:15px;background:#21111e;box-shadow:0 12px 30px #0008;display:grid;gap:6px}.portal-menu-items button{width:100%;padding:10px 12px;text-align:left;border-radius:10px;background:#ffffff08;border:1px solid #ff9dc933;color:#ffe5f0;font-size:.88rem}.portal-menu-items button:hover{background:#ff4b8a22}</style>
 
 <style>
+#music-welcome-overlay{position:fixed;inset:0;z-index:55;display:flex;align-items:center;justify-content:center;padding:22px;background:#10070edb;backdrop-filter:blur(7px)}
+#music-welcome-overlay[hidden]{display:none}
+.music-welcome-card{width:min(100%,360px);padding:25px 22px;border:1px solid #ff9dc977;border-radius:24px;background:linear-gradient(145deg,#32152a,#1b0d19);text-align:center;box-shadow:0 16px 55px #0009,0 0 30px #ff4b8a22}
+.music-welcome-emoji{font-size:2rem;margin-bottom:8px}
+.music-welcome-card h2{font:italic 500 1.65rem/1.2 Georgia,serif;color:#ffc1dd;margin:0 0 12px}
+.music-welcome-card p{color:#fff0f7;line-height:1.6;margin:0 0 18px;font-size:.98rem}
+.music-welcome-card button{font-size:.92rem;padding:11px 18px}
 #love-disc-button{position:fixed;right:14px;bottom:14px;z-index:50;width:48px;height:48px;padding:0;border:2px solid #ffb6d7;border-radius:50%;background:radial-gradient(circle at center,#ffd6e8 0 8%,#b82c68 9% 16%,#f6a3c7 17% 23%,#24111e 24% 29%,#d84482 30% 100%);box-shadow:0 4px 18px #0008,0 0 16px #ff5c9a44;display:grid;place-items:center;color:#fff;cursor:pointer}
 #love-disc-button::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff1f7;border:2px solid #6f2044;box-shadow:0 0 0 2px #ffd4e7}
 #love-disc-button.is-playing{animation:love-disc-spin 3s linear infinite}
@@ -521,6 +528,14 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
 </script>
 
 
+<div id="music-welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="music-welcome-title">
+  <div class="music-welcome-card">
+    <div class="music-welcome-emoji" aria-hidden="true">🥹💗</div>
+    <h2 id="music-welcome-title">Hey, Princessa!</h2>
+    <p>Please click the little disk below, Princess 🥹🎵</p>
+    <button id="music-welcome-close" class="primary" type="button">Okay, let's go 💕</button>
+  </div>
+</div>
 <audio id="love-background-audio" preload="auto" loop>
   <source src="./Gyakie-Ft.-Omah-Lay-%E2%80%93-Forever-Remix.mp3" type="audio/mpeg">
 </audio>
@@ -532,7 +547,15 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
  const audio=document.getElementById('love-background-audio');
  const button=document.getElementById('love-disc-button');
  const label=document.getElementById('love-disc-state');
+ const welcome=document.getElementById('music-welcome-overlay');
+ const welcomeClose=document.getElementById('music-welcome-close');
  if(!audio||!button||!label)return;
+ if(welcome&&welcomeClose){
+   welcomeClose.addEventListener('click',function(){
+     welcome.hidden=true;
+     attemptAutoplay();
+   });
+ }
  audio.volume=0.5;
  let userHasPaused=false;
  function updateMusicUI(){
