@@ -49,7 +49,7 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 .portal-toolbar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 16px}.portal-menu{position:relative;z-index:5}.portal-menu summary{list-style:none;cursor:pointer;padding:11px 14px;border:1px solid #ff9dc977;border-radius:999px;background:#ffffff08;color:#ffe5f0;font-size:.9rem;font-weight:650}.portal-menu summary::-webkit-details-marker{display:none}.portal-menu-items{position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:8px;border:1px solid #ff9dc977;border-radius:15px;background:#21111e;box-shadow:0 12px 30px #0008;display:grid;gap:6px}.portal-menu-items button{width:100%;padding:10px 12px;text-align:left;border-radius:10px;background:#ffffff08;border:1px solid #ff9dc933;color:#ffe5f0;font-size:.88rem}.portal-menu-items button:hover{background:#ff4b8a22}</style>
 
 <style>
-#music-welcome-overlay{position:fixed;inset:0;z-index:55;display:flex;align-items:center;justify-content:center;padding:22px;background:#10070edb;backdrop-filter:blur(7px)}
+#music-welcome-overlay{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:22px;background:#10070edb;backdrop-filter:blur(7px)}
 #music-welcome-overlay[hidden]{display:none}
 .music-welcome-card{width:min(100%,360px);padding:25px 22px;border:1px solid #ff9dc977;border-radius:24px;background:linear-gradient(145deg,#32152a,#1b0d19);text-align:center;box-shadow:0 16px 55px #0009,0 0 30px #ff4b8a22}
 .music-welcome-emoji{font-size:2rem;margin-bottom:8px}
@@ -567,6 +567,7 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
    label.textContent=playing?'Pause music':'Play music';
  }
  button.addEventListener('click',async function(){
+   if(welcome)welcome.hidden=true;
    if(!audio.paused){userHasPaused=true;audio.pause();updateMusicUI();return;}
    userHasPaused=false;
    try{audio.volume=0.5;await audio.play();updateMusicUI();}
