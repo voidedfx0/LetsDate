@@ -430,15 +430,20 @@ async function loadPortalRequests() {
   try {
     let snap;
     if(admin) {
-      snap=await portalDb.collection('dateRequests').orderBy('createdAt','desc').limit(100).get();
+      snap=await portalDb.collection('dateRequests').limit(100).get();
     } else {
-      snap=await portalDb.collection('dateRequests').where('userId','==',activePortalUser.uid).orderBy('createdAt','desc').limit(50).get();
+      snap=await portalDb.collection('dateRequests').where('userId','==',activePortalUser.uid).limit(50).get();
     }
+    const sortedDocs = snap.docs.slice().sort((a,b) => {
+      const av = a.data().createdAt && a.data().createdAt.toMillis ? a.data().createdAt.toMillis() : 0;
+      const bv = b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0;
+      return bv - av;
+    });
     if(snap.empty) {
       portalMessage(admin?'admin-status':'princessa-status',admin?'No date requests yet. Princessa’s requests will appear here after she signs up and submits one.':'No date requests yet. Tap “Plan our date” when you are ready, my love. 💕');
       return;
     }
-    document.getElementById(target).innerHTML=snap.docs.map(doc=>requestCard(doc,admin)).join('');
+    document.getElementById(target).innerHTML=sortedDocs.map(doc=>requestCard(doc,admin)).join('');
     portalMessage(admin?'admin-status':'princessa-status','Showing '+snap.size+' request(s).');
   } catch(err) {
     portalMessage(admin?'admin-status':'princessa-status','Could not load requests. Check Firestore rules and indexes, then try again. ('+(err.code||'error')+')');
