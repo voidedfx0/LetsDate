@@ -89,6 +89,11 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <div class="heart">🔐</div><p class="eyebrow">Private owner area</p><h1>Your <span>admin portal</span></h1>
 <p class="question">Welcome back, Jephthah. Here are the date requests.</p>
 <div class="button-area"><button class="secondary" id="admin-refresh-button" type="button">Refresh requests ↻</button><button class="secondary portal-logout" type="button">Log out</button></div>
+<div class="portal-toolbar admin-request-tabs" role="tablist" aria-label="Filter date requests">
+<button class="primary" id="admin-tab-new" type="button" role="tab" aria-selected="true">🆕 New requests <span id="admin-new-count">0</span></button>
+<button class="secondary" id="admin-tab-reviewed" type="button" role="tab" aria-selected="false">Reviewed <span id="admin-reviewed-count">0</span></button>
+<button class="secondary" id="admin-tab-all" type="button" role="tab" aria-selected="false">All requests <span id="admin-all-count">0</span></button>
+</div>
 <p class="date-result" id="admin-status" aria-live="polite"></p><div id="admin-requests" class="date-time-form"></div>
 </section>
 <section id="princessa-dashboard-screen" class="hidden">
@@ -455,6 +460,8 @@ function portalFriendlyError(err) {
 function escapePortal(s) {
   return String(s==null?'':s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
+let adminRequestDocs = [];
+let adminRequestView = 'new';
 function requestCard(doc, admin) {
   const d=doc.data()||{};
   const date=escapePortal(d.date), time=escapePortal(d.time), outfit=escapePortal(d.outfit),
@@ -468,6 +475,27 @@ function requestCard(doc, admin) {
       '<button class="secondary" data-request-action="completed" data-request-id="'+doc.id+'">Mark completed</button></div>';
   }
   return '<article class="request-card"><h3>Date request</h3><p><strong>Date:</strong> '+date+' · '+time+'</p><p><strong>Outfit:</strong> '+outfit+'</p><p><strong>Location:</strong> '+location+'</p><p><strong>Clothing budget:</strong> ₦'+budget+'</p><p><strong>Status:</strong> '+status+'</p>'+actions+'</article>';
+}
+function renderAdminRequests(){
+  const target=document.getElementById('admin-requests');
+  const fresh=adminRequestDocs.filter(doc=>(doc.data().status||'pending')==='pending');
+  const reviewed=adminRequestDocs.filter(doc=>(doc.data().status||'pending')!=='pending');
+  document.getElementById('admin-new-count').textContent=fresh.length;
+  document.getElementById('admin-reviewed-count').textContent=reviewed.length;
+  document.getElementById('admin-all-count').textContent=adminRequestDocs.length;
+  const tabs={new:'admin-tab-new',reviewed:'admin-tab-reviewed',all:'admin-tab-all'};
+  Object.entries(tabs).forEach(([view,id])=>{
+    const button=document.getElementById(id);
+    const selected=adminRequestView===view;
+    button.setAttribute('aria-selected',String(selected));
+    button.className=selected?'primary':'secondary';
+  });
+  const visible=adminRequestView==='new'?fresh:adminRequestView==='reviewed'?reviewed:adminRequestDocs;
+  if(!visible.length){
+    target.innerHTML='<p class="hint">'+(adminRequestView==='new'?'You’re all caught up! No new requests. 💗':adminRequestView==='reviewed'?'No reviewed requests yet.':'No date requests yet.')+'</p>';
+    return;
+  }
+  target.innerHTML=visible.map(doc=>requestCard(doc,true)).join('');
 }
 async function loadPortalRequests() {
   if(!activePortalUser) return;
@@ -487,16 +515,28 @@ async function loadPortalRequests() {
       const bv = b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0;
       return bv - av;
     });
-    if(snap.empty) {
-      portalMessage(admin?'admin-status':'princessa-status',admin?'No date requests yet. Princessa’s requests will appear here after she signs up and submits one.':'No date requests yet. Tap “Plan our date” when you are ready, my love. 💕');
+    if(admin){
+      adminRequestDocs=sortedDocs;
+      renderAdminRequests();
+      portalMessage('admin-status','Showing '+snap.size+' request(s). New requests are pending and appear in the New requests tab.');
       return;
     }
-    document.getElementById(target).innerHTML=sortedDocs.map(doc=>requestCard(doc,admin)).join('');
-    portalMessage(admin?'admin-status':'princessa-status','Showing '+snap.size+' request(s).');
+    if(snap.empty) {
+      portalMessage('princessa-status','No date requests yet. Tap “Plan our date” when you are ready, my love. 💕');
+      return;
+    }
+    document.getElementById(target).innerHTML=sortedDocs.map(doc=>requestCard(doc,false)).join('');
+    portalMessage('princessa-status','Showing '+snap.size+' request(s).');
   } catch(err) {
     portalMessage(admin?'admin-status':'princessa-status','Could not load requests. Check Firestore rules and indexes, then try again. ('+(err.code||'error')+')');
   }
 }
+['new','reviewed','all'].forEach(view=>{
+  document.getElementById('admin-tab-'+view).addEventListener('click',()=>{
+    adminRequestView=view;
+    renderAdminRequests();
+  });
+});
 document.getElementById('admin-refresh-button').addEventListener('click',loadPortalRequests);
 document.getElementById('princessa-menu-refresh').addEventListener('click',()=>{document.querySelector('#princessa-dashboard-screen .portal-menu').open=false;loadPortalRequests();});
 document.getElementById('princessa-menu-upcoming').addEventListener('click',()=>{document.querySelector('#princessa-dashboard-screen .portal-menu').open=false;document.getElementById('princessa-requests').scrollIntoView({behavior:'smooth',block:'start'});});
