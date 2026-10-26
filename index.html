@@ -553,15 +553,27 @@ document.getElementById('final-confirm-button').addEventListener('click',async()
  audio.addEventListener('pause',updateMusicUI);
  audio.addEventListener('ended',updateMusicUI);
  audio.addEventListener('error',function(){label.textContent='Song file unavailable';});
- // Attempt autoplay on load, and retry on the first visitor interaction if the browser blocks it.
+ // Try autoplay on load; if blocked, start from the first tap/click anywhere on the page.
  function attemptAutoplay(){
    if(userHasPaused||!audio.paused)return;
    audio.volume=0.5;
    audio.play().then(updateMusicUI).catch(updateMusicUI);
  }
  attemptAutoplay();
- ['pointerdown','touchstart','keydown'].forEach(function(eventName){
-   document.addEventListener(eventName,attemptAutoplay,{once:true,passive:true});
+ function startFromFirstInteraction(event){
+   if(userHasPaused||!audio.paused)return;
+   // Do not steal the disc button's own pause/resume click.
+   if(event && event.target===button)return;
+   attemptAutoplay();
+   if(!audio.paused){
+     document.removeEventListener('click',startFromFirstInteraction,true);
+     document.removeEventListener('pointerdown',startFromFirstInteraction,true);
+     document.removeEventListener('touchstart',startFromFirstInteraction,true);
+     document.removeEventListener('keydown',startFromFirstInteraction,true);
+   }
+ }
+ ['click','pointerdown','touchstart','keydown'].forEach(function(eventName){
+   document.addEventListener(eventName,startFromFirstInteraction,{capture:true,passive:true});
  });
 })();
 </script>
