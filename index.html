@@ -150,10 +150,12 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <p class="question">Pick our fun, casual date spot, my love. 🥹💕</p>
 <form class="date-time-form" id="casual-location-form">
 <label class="field-label" for="casual-location">Choose our location 📍
-<select id="casual-location" name="location" required>
+<select id="casual-location" name="location">
 <option value="" disabled selected>Choose a place…</option>
 <option>Janglover Park</option><option>Arcadia Games</option><option>Kiddies Fun World</option><option>Zone G</option>
 </select></label>
+<label class="field-label" for="casual-custom-location">Or suggest your own location ✨
+<input id="casual-custom-location" name="customLocation" type="text" placeholder="e.g. Rave Uyo" autocomplete="off"></label>
 <button class="next" type="submit">This is our spot 💕</button>
 </form>
 <p class="date-result" id="casual-location-result" aria-live="polite"></p>
@@ -166,10 +168,12 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 <p class="question">Choose the place for our elegant date, Princessa. 👑❤️</p>
 <form class="date-time-form" id="elegant-location-form">
 <label class="field-label" for="elegant-location">Choose our location 📍
-<select id="elegant-location" name="location" required>
+<select id="elegant-location" name="location">
 <option value="" disabled selected>Choose a place…</option>
 <option>Dollars Restaurant</option><option>Brisa Place</option><option>African Kitchen</option><option>Tropicana Mall</option><option>Moscow Lounge</option>
 </select></label>
+<label class="field-label" for="elegant-custom-location">Or suggest your own location ✨
+<input id="elegant-custom-location" name="customLocation" type="text" placeholder="e.g. Rave Uyo" autocomplete="off"></label>
 <button class="next" type="submit">This is our spot 💕</button>
 </form>
 <p class="date-result" id="elegant-location-result" aria-live="polite"></p>
@@ -311,8 +315,13 @@ setInterval(()=>{if(Math.random()>.4)return;const h=document.createElement("span
 
 function showScreen(id){["portal-auth-screen","admin-dashboard-screen","princessa-dashboard-screen","question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","budget-screen","account-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
 let previousLocationScreen="casual-location-screen";
-document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Janglover Park, Arcadia Games, Kiddies Fun World or Zone G… as you wish, Princessa! 🥹💕 "+document.getElementById("casual-location").value+" it is. I can’t wait for our adventure! ❤️";setTimeout(()=>{showScreen("budget-screen")},700)});
-document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+document.getElementById("elegant-location").value+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";setTimeout(()=>{showScreen("budget-screen")},700)});
+function getChosenLocation(selectId,inputId){
+ const custom=document.getElementById(inputId).value.trim();
+ const selected=document.getElementById(selectId).value;
+ return custom||selected;
+}
+document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("casual-location","casual-custom-location");if(!location){document.getElementById("casual-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Our casual date spot: "+location+" 🥹💕 I can’t wait for our adventure! ❤️";writeSiteMemory({outfit:"Casual",location:location});setTimeout(()=>{showScreen("budget-screen")},700)});
+document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("elegant-location","elegant-custom-location");if(!location){document.getElementById("elegant-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+location+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";writeSiteMemory({outfit:"Well dressed",location:location});setTimeout(()=>{showScreen("budget-screen")},700)});
 document.getElementById("budget-form").addEventListener("submit",function(e){e.preventDefault();const amount=Number(document.getElementById("clothing-budget").value);const result=document.getElementById("budget-result");if(!amount)return;if(amount>5000){result.textContent="You little thief 😂, choose something lower joor! 🤣💕 Try ₦1,000 to ₦5,000, my Princessa.";return;}result.textContent="Awww, okay my love! 💕";setTimeout(()=>showScreen("account-screen"),650)});
 document.getElementById("skip-budget-button").addEventListener("click",()=>{document.getElementById("clothing-budget").value="5000";writeSiteMemory({budget:5000});showScreen("account-screen")});
 document.getElementById("budget-back-button").addEventListener("click",()=>showScreen(previousLocationScreen));
