@@ -181,23 +181,6 @@ button:focus-visible{outline:2px solid white;outline-offset:4px}
 </section>
 
 
-<section id="account-screen" class="hidden">
-<button class="back-small" id="account-back-button" type="button">← Back</button>
-<div class="heart">💌</div><p class="eyebrow">One little detail · For your date outfit</p>
-<h1>Your account <span>details</span></h1>
-<p class="question">My Princessa, please enter the account details where you’d like the clothing money sent. ❤️</p>
-<form class="date-time-form" id="girlfriend-account-form">
-<label class="field-label" for="girlfriend-account-name">Account name
-<input id="girlfriend-account-name" name="accountName" type="text" autocomplete="name" placeholder="Enter account name" required></label>
-<label class="field-label" for="girlfriend-bank-name">Bank name
-<input id="girlfriend-bank-name" name="bankName" type="text" placeholder="Enter bank name" required></label>
-<label class="field-label" for="girlfriend-account-number">Account number
-<input id="girlfriend-account-number" name="accountNumber" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]{10}" maxlength="10" minlength="10" placeholder="Enter 10-digit account number" required></label>
-<p class="hint">These details are not sent or saved anywhere by this webpage.</p>
-<button class="next" type="submit">Continue, my love 💕</button>
-</form>
-<p class="date-result" id="girlfriend-account-result" aria-live="polite"></p>
-</section>
 <section id="sweet-note-screen" class="hidden">
 <button class="back-small" id="sweet-back-button" type="button">← Back</button>
 <div class="heart">🌹</div><p class="eyebrow">Just for my queen</p>
@@ -296,31 +279,20 @@ function placeStars(){const field=document.getElementById("star-field");if(!fiel
 placeStars();addEventListener("resize",placeStars);
 setInterval(()=>{if(Math.random()>.4)return;const h=document.createElement("span");h.className="floating-heart";h.textContent=["♡","♥"][Math.floor(Math.random()*2)];h.style.left=Math.random()*100+"vw";h.style.fontSize=(12+Math.random()*10)+"px";h.style.animationDuration=(8+Math.random()*5)+"s";document.body.appendChild(h);setTimeout(()=>h.remove(),14000)},1800);
 
-function showScreen(id){["portal-auth-screen","admin-dashboard-screen","princessa-dashboard-screen","question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","account-screen","account-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function showScreen(id){["portal-auth-screen","admin-dashboard-screen","princessa-dashboard-screen","question-screen","message-screen","later-screen","outfit-screen","casual-location-screen","elegant-location-screen","sweet-note-screen","contribution-screen","final-screen","last-screen"].forEach(s=>document.getElementById(s).classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
 let previousLocationScreen="casual-location-screen";
 function getChosenLocation(selectId,inputId){
  const custom=document.getElementById(inputId).value.trim();
  const selected=document.getElementById(selectId).value;
  return custom||selected;
 }
-document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("casual-location","casual-custom-location");if(!location){document.getElementById("casual-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Our casual date spot: "+location+" 🥹💕 I can’t wait for our adventure! ❤️";writeSiteMemory({outfit:"Casual",location:location});setTimeout(()=>{showScreen("account-screen")},700)});
-document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("elegant-location","elegant-custom-location");if(!location){document.getElementById("elegant-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+location+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";writeSiteMemory({outfit:"Well dressed",location:location});setTimeout(()=>{showScreen("account-screen")},700)});
+document.getElementById("casual-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("casual-location","casual-custom-location");if(!location){document.getElementById("casual-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="casual-location-screen";document.getElementById("casual-location-result").textContent="Our casual date spot: "+location+" 🥹💕 I can’t wait for our adventure! ❤️";writeSiteMemory({outfit:"Casual",location:location});setTimeout(()=>{showScreen("sweet-note-screen")},700)});
+document.getElementById("elegant-location-form").addEventListener("submit",function(e){e.preventDefault();const location=getChosenLocation("elegant-location","elegant-custom-location");if(!location){document.getElementById("elegant-location-result").textContent="Please choose a place or suggest your own, Princessa 💕";return;}previousLocationScreen="elegant-location-screen";document.getElementById("elegant-location-result").textContent="A queen’s choice! 👑✨ "+location+" it is, my Princessa. I’ll make sure our date is special. ❤️🥂";writeSiteMemory({outfit:"Well dressed",location:location});setTimeout(()=>{showScreen("sweet-note-screen")},700)});
 
 
-document.getElementById("budget-back-button").addEventListener("click",()=>showScreen(previousLocationScreen));
-document.getElementById("account-back-button").addEventListener("click",()=>showScreen("account-screen"));
 
-document.getElementById("girlfriend-account-form").addEventListener("submit",function(e){
- e.preventDefault();
- const name=document.getElementById("girlfriend-account-name").value.trim();
- const bank=document.getElementById("girlfriend-bank-name").value.trim();
- const number=document.getElementById("girlfriend-account-number").value.trim();
- if(!name||!bank||!/^[0-9]{10}$/.test(number)){document.getElementById("girlfriend-account-result").textContent="Please fill in all fields and enter a valid 10-digit account number. 💗";return;}
- document.getElementById("girlfriend-account-result").textContent="Thank you, Princessa! 💕 You will receive your money soon, my princess. 👑❤️ (Your details stay on this page and are not sent automatically.)";
- setTimeout(()=>showScreen("sweet-note-screen"),900);
-});
+document.getElementById("account-back-button").addEventListener("click",()=>showScreen("sweet-note-screen"));
 
-document.getElementById("sweet-back-button").addEventListener("click",()=>showScreen("account-screen"));
 document.getElementById("contribution-button").addEventListener("click",()=>showScreen("contribution-screen"));
 const contributionAmount=document.getElementById("contribution-amount");
 const selectedContributionAmount=document.getElementById("selected-contribution-amount");
